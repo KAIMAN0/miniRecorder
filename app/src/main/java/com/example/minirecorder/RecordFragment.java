@@ -1,6 +1,10 @@
 package com.example.minirecorder;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +21,7 @@ public class RecordFragment extends SuperFragment implements View.OnClickListene
     private ImageButton mRecordBtn;
     private Button mSubmitBtn;
     private Button mCancelBtn;
+    public static final int ACTIVITY_RECORD_SOUND = 0;
 
 
     public RecordFragment(){
@@ -57,8 +62,24 @@ public class RecordFragment extends SuperFragment implements View.OnClickListene
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case ACTIVITY_RECORD_SOUND:
+                Log.d(TAG, "onActivityResult: ACTIVITY_RECORD_SOUND");
+                if (resultCode == Activity.RESULT_OK) {
+                   //todo
+
+                }
+                break;
+        }
+    }
+
     private void startRecording() {
         //todo
+        Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+        startActivityForResult(intent, ACTIVITY_RECORD_SOUND);
     }
 
     private void setPasageText(String resultFromServer){
