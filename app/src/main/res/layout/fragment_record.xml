@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:background="@color/bg"
+    >
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/stepGroup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/passageTv"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="40dp"
+            android:scrollbars="vertical"
+            android:text="A complete sentence must have, at minimum, three things: a subject, verb, and an object. The subject is typically a noun or a pronoun. And, if there's a subject, there's bound to be a verb because all verbs need a subject. Finally, the object of a sentence is the thing that's being acted upon by the subject. A complete sentence must have, at minimum, three things: a subject, verb, and an object. The subject is typically a noun or a pronoun. And, if there's a subject, there's bound to be a verb because all verbs need a subject. Finally, the object of a sentence is the thing that's being acted upon by the subject."
+            android:textSize="18dp" />
+
+        <ImageButton
+            android:id="@+id/recordBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/circle_btn"
+            android:src="@android:drawable/ic_btn_speak_now" />
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/cancelBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="Cancel"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/submitBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="Submit"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+        </android.support.v7.widget.LinearLayoutCompat>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+</RelativeLayout>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:clickable="true" >
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/stepGroup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:layout_width="0px"
+            android:layout_height="0px" />
+
+        <EditText
+            android:id="@+id/nameET"
+            android:hint="Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginRight="20dp"
+            android:padding="5dp"
+            android:text=""
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:inputType="text"
+            />
+
+        <RadioGroup
+            android:id="@+id/languageRG"
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center" >
+
+            <RadioButton
+                android:id="@+id/mandarineBTN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mandarine"
+                android:checked="false"/>
+
+            <RadioButton
+                android:id="@+id/cantoneseBTN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cantonese"
+                android:checked="false"/>
+
+            <RadioButton
+                android:id="@+id/englishBTN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="English"
+                android:checked="false"/>
+
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/nextBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="20dp"
+            android:padding="5dp"
+            android:text="Next"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/photoPreviewIv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:text="START SCANNING"
+            android:textStyle="bold" />
+
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+</RelativeLayout>
