@@ -2,9 +2,12 @@ package com.example.minirecorder;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,18 +16,30 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.util.Date;
 
 public class RecordFragment extends SuperFragment implements View.OnClickListener {
 
     public static String TAG = "RecordFragment";
     private TextView mPassageTv;
     private ImageButton mRecordBtn;
-    private Button mSubmitBtn;
-    private Button mCancelBtn;
+    private Button mStopBtn;
+    private Button mStartBtn;
+    private ImageButton mDiscardBtn;
     public static final int ACTIVITY_RECORD_SOUND = 0;
+    private String mNameString;
+    private String mLangString;
+    private String AudioSavePathInDevice;
+    private Button mSubmitBtn;
+    MediaRecorder mediaRecorder ;
+    private String mAudioName = "";
 
 
     public RecordFragment(){
@@ -37,12 +52,23 @@ public class RecordFragment extends SuperFragment implements View.OnClickListene
         mPassageTv = (TextView) rootView.findViewById(R.id.passageTv);
         mPassageTv.setMovementMethod(new ScrollingMovementMethod());
         mRecordBtn = (ImageButton) rootView.findViewById(R.id.recordBtn);
+        mDiscardBtn = (ImageButton) rootView.findViewById(R.id.discardBtn);
+        mStopBtn = (Button) rootView.findViewById(R.id.stopBtn);
+        mStartBtn = (Button) rootView.findViewById(R.id.startBtn);
         mSubmitBtn = (Button) rootView.findViewById(R.id.submitBtn);
-        mCancelBtn = (Button) rootView.findViewById(R.id.cancelBtn);
         mRecordBtn.setOnClickListener(this);
+        mStopBtn.setOnClickListener(this);
+        mStartBtn.setOnClickListener(this);
         mSubmitBtn.setOnClickListener(this);
-        mCancelBtn.setOnClickListener(this);
+        mDiscardBtn.setOnClickListener(this);
+        mSubmitBtn.setVisibility(View.INVISIBLE);
+        mDiscardBtn.setVisibility(View.INVISIBLE);
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            mNameString = bundle.getString("nameString", "CannotGetName");
+            mLangString = bundle.getString("langString", "CannotGetLang");
+        }
         return rootView;
 
     }
@@ -55,13 +81,72 @@ public class RecordFragment extends SuperFragment implements View.OnClickListene
         if (v == this.mRecordBtn) {
             Log.d(TAG, "mRecordBtn");
             startRecording();
+        } else if(v == mStopBtn){
+            Log.d(TAG, "mStopBtn");
+            //todo
+            mediaRecorder.stop();
+            mStopBtn.setEnabled(false);
+            mStartBtn.setEnabled(true);
+            mSubmitBtn.setVisibility(View.VISIBLE);
+            mDiscardBtn.setVisibility(View.VISIBLE);
+
+
+            Toast.makeText(getActivity(), "Recording Completed",
+                    Toast.LENGTH_LONG).show();
+
+        } else if(v == mStartBtn){
+            Log.d(TAG, "mStartBtn");
+            //todo
+
+                mAudioName = fileNameFactory();
+                AudioSavePathInDevice = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + mAudioName + ".mp3";
+                MediaRecorderReady();
+
+                try {
+                    mediaRecorder.prepare();
+                    mediaRecorder.start();
+                } catch (IllegalStateException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+                mStartBtn.setEnabled(false);
+                mStopBtn.setEnabled(true);
+
+                Toast.makeText(getActivity(), "Recording started",
+                        Toast.LENGTH_LONG).show();
+
         } else if(v == mSubmitBtn){
-            Log.d(TAG, "mSubmitBtn");
-            //todo
-        }
-        else if(v == mCancelBtn){
-            Log.d(TAG, "mCancelBtn");
-            //todo
+            File file = null;
+            if (!TextUtils.isEmpty(AudioSavePathInDevice)) {
+                file = new File(AudioSavePathInDevice);
+                try {
+                    //File file = new File(audioURI.getPath());
+
+                    UploadToServerUtil connection = new UploadToServerUtil();
+                    connection.uploadFile("http://chanjacky.com/minirecorder/uploadhelper.php", file, mAudioName, getActivity());
+                    FragmentUtils.onBack(getActivity());
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (v == mDiscardBtn){
+            File fdelete = new File(AudioSavePathInDevice);
+            if (fdelete.exists()) {
+                if (fdelete.delete()) {
+                    Toast.makeText(getActivity(), "Audio deleted!",
+                            Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "onClick: mDiscardBtn deleted");
+                } else {
+                    Log.d(TAG, "onClick: mDiscardBtn not yet deleted");
+                }
+            }
+            mDiscardBtn.setVisibility(View.INVISIBLE);
+            mSubmitBtn.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -73,8 +158,17 @@ public class RecordFragment extends SuperFragment implements View.OnClickListene
                 Log.d(TAG, "onActivityResult: ACTIVITY_RECORD_SOUND");
                 if (resultCode == Activity.RESULT_OK) {
                    //todo
-                Uri audio = data.getData();
-                f.ile = new File(new URI(uri.toString()));
+                Uri audioURI = data.getData();
+                    try {
+                        //File file = new File(audioURI.getPath());
+
+                        UploadToServerUtil connection = new UploadToServerUtil();
+                        connection.uploadFile("http://chanjacky.com/minirecorder/uploadhelper.php",FileUtil.getFileFromUri(audioURI, getActivity()),fileNameFactory(),getActivity());
+                        FragmentUtils.onBack(getActivity());
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                 }
                 break;
@@ -87,7 +181,21 @@ public class RecordFragment extends SuperFragment implements View.OnClickListene
         startActivityForResult(intent, ACTIVITY_RECORD_SOUND);
     }
 
+    private String fileNameFactory(){
+        String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+        return mNameString + "_" + mLangString + "_" + currentDateTimeString;
+    }
+
     private void setPasageText(String resultFromServer){
         mPassageTv.setText(resultFromServer);
     }
+
+    public void MediaRecorderReady(){
+        mediaRecorder=new MediaRecorder();
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        mediaRecorder.setOutputFile(AudioSavePathInDevice);
+    }
+
 }

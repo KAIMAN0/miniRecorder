@@ -3,7 +3,11 @@ package com.example.minirecorder;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 public class FragmentUtils {
 
@@ -84,4 +88,18 @@ public class FragmentUtils {
 
         return result;
     }
+
+    public static void backgroundThreadShortToast(final Context context,
+                                                  final String msg) {
+        if (context != null && msg != null) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+                @Override
+                public void run() {
+                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
 }
