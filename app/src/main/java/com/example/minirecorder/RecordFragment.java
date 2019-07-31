@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.io.File;
+import java.net.URI;
+
 public class RecordFragment extends SuperFragment implements View.OnClickListener {
 
     public static String TAG = "RecordFragment";
@@ -70,6 +73,8 @@ public class RecordFragment extends SuperFragment implements View.OnClickListene
                 Log.d(TAG, "onActivityResult: ACTIVITY_RECORD_SOUND");
                 if (resultCode == Activity.RESULT_OK) {
                    //todo
+                Uri audio = data.getData();
+                f.ile = new File(new URI(uri.toString()));
 
                 }
                 break;
