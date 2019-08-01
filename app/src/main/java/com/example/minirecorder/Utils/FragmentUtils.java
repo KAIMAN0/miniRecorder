@@ -1,4 +1,4 @@
-package com.example.minirecorder;
+package com.example.minirecorder.Utils;
 
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -8,6 +8,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.example.minirecorder.R;
+import com.example.minirecorder.SuperFragment;
 
 public class FragmentUtils {
 

@@ -1,4 +1,4 @@
-package com.example.minirecorder;
+package com.example.minirecorder.Utils;
 
 import android.content.ContentResolver;
 import android.content.Context;

@@ -3,6 +3,8 @@ package com.example.minirecorder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.minirecorder.Utils.FragmentUtils;
+
 public class MainActivity extends AppCompatActivity {
 
     protected static final String TAG = "MainActivity";

@@ -18,6 +18,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.minirecorder.Utils.FileUtil;
+import com.example.minirecorder.Utils.FragmentUtils;
+import com.example.minirecorder.Utils.GetPassageUtil;
+import com.example.minirecorder.Utils.UploadToServerUtil;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -25,8 +30,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Random;
-
-import static com.example.minirecorder.GetPassageUtil.NUMBER_OF_PASSAGES;
 
 public class RecordFragment extends SuperFragment implements View.OnClickListener {
 
@@ -168,7 +171,7 @@ public class RecordFragment extends SuperFragment implements View.OnClickListene
                         //File file = new File(audioURI.getPath());
 
                         UploadToServerUtil connection = new UploadToServerUtil();
-                        connection.uploadFile("http://chanjacky.com/minirecorder/uploadhelper.php",FileUtil.getFileFromUri(audioURI, getActivity()),fileNameFactory(),getActivity());
+                        connection.uploadFile("http://chanjacky.com/minirecorder/uploadhelper.php", FileUtil.getFileFromUri(audioURI, getActivity()),fileNameFactory(),getActivity());
                         FragmentUtils.onBack(getActivity());
 
                     } catch (Exception e) {
