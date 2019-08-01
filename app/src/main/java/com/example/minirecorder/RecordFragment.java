@@ -18,12 +18,15 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Random;
+
+import static com.example.minirecorder.GetPassageUtil.NUMBER_OF_PASSAGES;
 
 public class RecordFragment extends SuperFragment implements View.OnClickListener {
 
@@ -40,6 +43,7 @@ public class RecordFragment extends SuperFragment implements View.OnClickListene
     private Button mSubmitBtn;
     MediaRecorder mediaRecorder ;
     private String mAudioName = "";
+    private int mPassageID;
 
 
     public RecordFragment(){
@@ -63,6 +67,7 @@ public class RecordFragment extends SuperFragment implements View.OnClickListene
         mDiscardBtn.setOnClickListener(this);
         mSubmitBtn.setVisibility(View.INVISIBLE);
         mDiscardBtn.setVisibility(View.INVISIBLE);
+        getPasageText();
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -80,7 +85,7 @@ public class RecordFragment extends SuperFragment implements View.OnClickListene
 
         if (v == this.mRecordBtn) {
             Log.d(TAG, "mRecordBtn");
-            startRecording();
+            //startRecording();
         } else if(v == mStopBtn){
             Log.d(TAG, "mStopBtn");
             //todo
@@ -183,11 +188,26 @@ public class RecordFragment extends SuperFragment implements View.OnClickListene
 
     private String fileNameFactory(){
         String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
-        return mNameString + "_" + mLangString + "_" + currentDateTimeString;
+        return mNameString + "_" + mLangString + "_" + currentDateTimeString +"_" + mPassageID;
     }
 
-    private void setPasageText(String resultFromServer){
-        mPassageTv.setText(resultFromServer);
+    private void getPasageText(){
+        Log.d(TAG, "getPasageText is running ");
+        String text = "cannot get text ";
+        Random r = new Random();
+        mPassageID = r.nextInt(GetPassageUtil.NUMBER_OF_PASSAGES) + 1;
+
+        try {
+            text = GetPassageUtil.getPassageByIndex(getActivity().getAssets().open("passage.json"),mPassageID);
+            Log.d(TAG, "getPasageText is trying ");
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d(TAG, "getPasageText is catching ");
+        }
+        if(StringUtils.isNotEmpty(text)&&text!=null) {
+            Log.d(TAG, "getPasageText is setting msg ");
+            mPassageTv.setText(text);
+        }
     }
 
     public void MediaRecorderReady(){
